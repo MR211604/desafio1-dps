@@ -2,8 +2,9 @@
 export const Invoice = ({ products, total, user }) => {
   const date = new Date().toLocaleString();
 
+
   return (
-    <div className="container mt-5">
+    <div className="container">
       <h3 className="mb-4 text-center">Factura</h3>
       <p><strong>Cliente:</strong> {user?.username}</p>
       <p><strong>Fecha:</strong> {date}</p>
@@ -20,7 +21,7 @@ export const Invoice = ({ products, total, user }) => {
         <tbody>
           {products.map(p => (
             <tr key={p.id}>
-              <td>{p.nameProduct}</td>
+              <td>{p.title}</td>
               <td>{p.quantity}</td>
               <td>${p.price.toFixed(2)}</td>
               <td>${(p.price * p.quantity).toFixed(2)}</td>

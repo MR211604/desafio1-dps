@@ -30,10 +30,40 @@ export const Headers = ({
         }
     };
 
+    const substractCount = (product) => {
+
+            const results = allProducts.map(item => {
+                if (item.id === product.id) {
+                    item.quantity -= 1;
+                }
+                return item;
+            }).filter(item => item.quantity > 0);
+
+            setTotal(total - product.price);
+            setCountProducts(countProducts - 1);
+            setAllProducts(results);
+    };
+
+    const addCount = (product) => {
+         const results = allProducts.map(item => {
+                if (item.id === product.id) {
+                    item.quantity += 1;
+                }
+                return item;
+            }).filter(item => item.quantity > 0);
+
+            setTotal(total + product.price);
+            setCountProducts(countProducts + 1);
+            setAllProducts(results);
+    }
+
     const onCleanCart = () => {
-        setAllProducts([]);
-        setTotal(0);
-        setCountProducts(0);
+        const confirmDialog = confirm('¿Está seguro de querer vaciar este carrito?');
+        if (confirmDialog) {
+            setAllProducts([]);
+            setTotal(0);
+            setCountProducts(0);
+        }
     };
     return (
         <header>
@@ -90,7 +120,7 @@ export const Headers = ({
                                             <span className="cantidad-producto-carrito me-3 bg-black p-2 text-center text-white rounded">
                                                 {product.quantity}
                                             </span>
-                                            <div className="product-details me-3">
+                                            <div className="product-details">
                                                 <p className="titulo-producto-carrito mb-0 fw-bold">
                                                     {product.title}
                                                 </p>
@@ -98,6 +128,10 @@ export const Headers = ({
                                                     ${product.price}
                                                 </span>
                                             </div>
+                                        </div>
+                                        <div className='m-4'>
+                                        <button className='btn btn-dark me-2' onClick={() => substractCount(product)}> - </button>
+                                        <button className='btn btn-dark' onClick={() => addCount(product)}> + </button>
                                         </div>
                                         <img
                                             src="https://cdn-icons-png.flaticon.com/512/786/786195.png"
@@ -114,7 +148,7 @@ export const Headers = ({
                                 <span className="total-pagar fs-4 fw-bold text-black">${total}</span>
                             </div>
 
-                            <button className="btn btn-dark w-100 mt-3 py-2" onClick={onCleanCart}>
+                            <button className="btn btn-dark w-100 mt-3 py-2 mb-3" onClick={onCleanCart}>
                                 Vaciar Carrito
                             </button>
                         </>

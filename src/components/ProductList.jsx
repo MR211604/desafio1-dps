@@ -4,7 +4,7 @@ import React from "react";
 
 
 export const ProductList = ({
-  allProducts = [], // valor por defecto para evitar undefined
+  allProducts = [], 
   setAllProducts,
   countProducts,
   setCountProducts,
@@ -12,7 +12,6 @@ export const ProductList = ({
   setTotal,
 }) => {
   const onAddProduct = (product) => {
-    //validamos que allProducts sea un array antes de usar .find
     if (Array.isArray(allProducts) && allProducts.find(item => item.id === product.id)) {
       const products = allProducts.map(item =>
         item.id === product.id
