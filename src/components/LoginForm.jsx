@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 
-export const LoginForm = ({ users, setUser }) => {
+export const LoginForm = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const userFound = users.find(
-      u => u.username === credentials.username && u.password === credentials.password
-    );
+    setLoading(true);
 
-    if (userFound) {
-      setUser(userFound);
-      alert("¡Bienvenido, " + credentials.username + "!");
+    const result = await onLogin(credentials.username, credentials.password);
+    
+    if (result.success) {
+      alert(result.message);
+      setCredentials({ username: "", password: "" });
     } else {
-      alert("Credenciales incorrectas.");
+      alert(result.message);
     }
+    
+    setLoading(false);
   };
 
   return (
@@ -47,7 +50,9 @@ export const LoginForm = ({ users, setUser }) => {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary w-100">Ingresar</button>
+      <button type="submit" className="btn btn-dark w-100" disabled={loading}>
+        {loading ? 'Iniciando sesión...' : 'Ingresar'}
+      </button>
     </form>
   );
 };

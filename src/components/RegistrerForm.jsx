@@ -1,20 +1,24 @@
 'use client';
 import { useState } from "react";
 
-export const RegisterForm = ({ users, setUsers }) => {
+export const RegisterForm = ({ onRegister }) => {
   const [newUser, setNewUser] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const exists = users.find(u => u.username === newUser.username);
+    setLoading(true);
 
-    if (exists) {
-      alert("Este usuario ya está registrado.");
-    } else {
-      setUsers([...users, newUser]);
-      alert("¡Registro exitoso!");
+    const result = await onRegister(newUser.username, newUser.password);
+    
+    if (result.success) {
+      alert(result.message);
       setNewUser({ username: "", password: "" });
+    } else {
+      alert(result.message);
     }
+    
+    setLoading(false);
   };
 
   return (
@@ -47,7 +51,9 @@ export const RegisterForm = ({ users, setUsers }) => {
         />
       </div>
 
-      <button type="submit" className="btn btn-success w-100">Registrarse</button>
+      <button type="submit" className="btn btn-dark w-100" disabled={loading}>
+        {loading ? 'Registrando...' : 'Registrarse'}
+      </button>
     </form>
   );
 };
